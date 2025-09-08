@@ -1,7 +1,7 @@
 def calculate_average(nums):
     total = sum(nums)
     count = len(nums)
-    total / count
+    return total / count
 
 
 nums = [10, 15, 20]

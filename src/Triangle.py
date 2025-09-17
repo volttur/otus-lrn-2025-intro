@@ -12,5 +12,22 @@ class Triangle(Figure):
         self.c = c
 
     @property
+    def perimeter(self) -> float:
+        return round(self.a + self.b + self.c, 2)
+
+    @property
+    def area(self) -> float:
+        return round(
+            (
+                (self.a + self.b + self.c)
+                * (self.b + self.c - self.a)
+                * (self.a + self.c - self.b)
+                * (self.a + self.b - self.c)
+            )
+            ** (1 / 4),
+            2,
+        )
+
+    @property
     def info(self):
         print(f"a = {self.a}, b = {self.b}, c = {self.c}")

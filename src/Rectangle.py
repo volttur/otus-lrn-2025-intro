@@ -9,5 +9,13 @@ class Rectangle(Figure):
         self.b = b
 
     @property
+    def perimeter(self) -> float:
+        return round(2 * (self.a + self.b), 2)
+
+    @property
+    def area(self) -> float:
+        return round(self.a * self.b, 2)
+
+    @property
     def info(self):
         print(f"a = {self.a}, b = {self.b}")

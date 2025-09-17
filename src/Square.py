@@ -8,5 +8,13 @@ class Square(Figure):
         self.a = a
 
     @property
+    def perimeter(self) -> float:
+        return round(4 * self.a, 2)
+
+    @property
+    def area(self) -> float:
+        return round(self.a**2, 2)
+
+    @property
     def info(self):
         print(f"a = {self.a}")

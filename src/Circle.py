@@ -4,7 +4,8 @@ import math
 
 class Circle(Figure):
     def __init__(self, r: float):
-        if type(r) != float and type(r) != int: raise TypeError("Радиус может быть представлен только числом")
+        if type(r) is not float and type(r) is not int:
+            raise TypeError("Радиус может быть представлен только числом")
         if r <= 0:
             raise ValueError("Радиус должен быть больше 0")
         self.r = r

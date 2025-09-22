@@ -3,6 +3,7 @@ from Figure import Figure
 
 class Square(Figure):
     def __init__(self, a: float) -> float:
+        if type(a) != float and type(a) != int: raise TypeError("Сторона может быть представлена только числом")
         if a <= 0:
             raise ValueError("Сторона должна быть больше чем 0")
         self.a = a

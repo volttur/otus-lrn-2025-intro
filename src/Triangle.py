@@ -1,8 +1,14 @@
-from Figure import Figure
+from src.Figure import Figure
 
 
 class Triangle(Figure):
     def __init__(self, a: float, b: float, c: float) -> float:
+        if (
+            (type(a) is not float and type(a) is not int)
+            or (type(b) is not float and type(b) is not int)
+            or (type(c) is not float and type(c) is not int)
+        ):
+            raise TypeError("Сторона может быть представлена только числом")
         if a <= 0 or b <= 0 or c <= 0:
             raise ValueError("Сторона должна быть больше 0")
         if a + b <= c or a + c <= b or b + c <= a:
@@ -24,7 +30,8 @@ class Triangle(Figure):
                 * (self.a + self.c - self.b)
                 * (self.a + self.b - self.c)
             )
-            ** (1 / 4),
+            ** (1 / 2)
+            / 4,
             2,
         )
 

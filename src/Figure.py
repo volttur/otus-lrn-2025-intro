@@ -21,4 +21,4 @@ class Figure(ABC):
         if "Figure" in list(map(lambda el: el.__name__, fig.__class__.__mro__)):
             return round(self.area + fig.area, 2)
         else:
-            raise ValueError("Функция должна принимать фигуру")
+            raise TypeError("Функция должна принимать фигуру")

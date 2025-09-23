@@ -1,9 +1,6 @@
-import sys
 import pytest
 
-sys.path.append("C:/Users/AristovAV3/pyprojs/otus-lrn-2025-intro/src")
-
-from Triangle import Triangle
+from src.Triangle import Triangle
 
 
 @pytest.mark.parametrize(

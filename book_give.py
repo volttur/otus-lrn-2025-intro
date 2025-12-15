@@ -16,18 +16,23 @@ load_dotenv()
 
 PATH_TO_FILES = os.getenv("PATH_TO_FILES")
 
-books = None
+books = []
 users = None
 result = []
-result_user_fields = ["name", "gender", "address", "age"]
-result_book_fields = ["title", "author", "pages", "genre"]
+result_user_fields = ("name", "gender", "address", "age")
+result_book_fields = ("title", "author", "pages", "genre")
 csv_map = None
 
-with open(f"{PATH_TO_FILES}/books.csv", newline="") as f:
-    books = [book for book in csv.reader(f, delimiter=",")]
-    csv_map = {books[0].index(header): header.casefold() for header in books[0]}
-    books.pop(0)
-    books = list(map(lambda b: {csv_map[b.index(field)]: field for field in b}, books))
+with open(f"{PATH_TO_FILES}/books.csv", newline="") as books_file:
+    books_reader = csv.reader(books_file)
+    next(books_reader)
+
+    for row in books_reader:
+        books.append(dict(zip(result_book_fields, row)))
+    #books = [book for book in csv.reader(f, delimiter=",")]
+    #csv_map = {books[0].index(header): header.casefold() for header in books[0]}
+    #books.pop(0)
+    #books = list(map(lambda b: {csv_map[b.index(field)]: field for field in b}, books))
 
 with open(f"{PATH_TO_FILES}/users.json", newline="") as f:
     users = json.load(f)

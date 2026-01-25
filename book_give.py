@@ -29,10 +29,10 @@ with open(f"{PATH_TO_FILES}/books.csv", newline="") as books_file:
 
     for row in books_reader:
         books.append(dict(zip(result_book_fields, row)))
-    #books = [book for book in csv.reader(f, delimiter=",")]
-    #csv_map = {books[0].index(header): header.casefold() for header in books[0]}
-    #books.pop(0)
-    #books = list(map(lambda b: {csv_map[b.index(field)]: field for field in b}, books))
+    # books = [book for book in csv.reader(f, delimiter=",")]
+    # csv_map = {books[0].index(header): header.casefold() for header in books[0]}
+    # books.pop(0)
+    # books = list(map(lambda b: {csv_map[b.index(field)]: field for field in b}, books))
 
 with open(f"{PATH_TO_FILES}/users.json", newline="") as f:
     users = json.load(f)

@@ -3,66 +3,66 @@ import json
 import requests
 import os
 from dotenv import load_dotenv
-import re
-import random
 import utils
 
 load_dotenv()
-with open(os.environ.get('INFOPATH'), 'r') as f:
+with open(os.environ.get("INFOPATH"), "r") as f:
     info = json.load(f)
-url = info['urls']['url_api_brew']
+url = info["urls"]["url_api_brew"]
 
 
 def test_all_brews(build_link_all_brews):
     res = requests.get(build_link_all_brews)
     brews = res.json()
-    assert res.status_code == 200, 'Status code differ from 200'
-    assert len(brews) == len(set([brew['id'] for brew in brews])), 'Doubles in response'
-    assert brews[utils.rnd_el(brews)]['name'] is not None, 'Name is None'
-    assert brews[utils.rnd_el(brews)]['city'] is not None, 'City is None'
-    assert brews[utils.rnd_el(brews)]['country'] is not None, 'Country is None'
+    assert res.status_code == 200, "Status code differ from 200"
+    assert len(brews) == len(set([brew["id"] for brew in brews])), "Doubles in response"
+    assert brews[utils.rnd_el(brews)]["name"] is not None, "Name is None"
+    assert brews[utils.rnd_el(brews)]["city"] is not None, "City is None"
+    assert brews[utils.rnd_el(brews)]["country"] is not None, "Country is None"
 
 
-@pytest.mark.parametrize('city', [utils.rnd_city() for i in range(3)])
+@pytest.mark.parametrize("city", [utils.rnd_city() for i in range(3)])
 def test_all_brews_filter(city, build_link_all_brews):
-    city_url = city.lower().replace(' ', '_')
-    res = requests.get(utils.build_link(build_link_all_brews, f'?by_city={city_url}'))
+    city_url = city.lower().replace(" ", "_")
+    res = requests.get(utils.build_link(build_link_all_brews, f"?by_city={city_url}"))
     els = res.json()
-    assert res.status_code == 200, 'Status code differ from 200'
-    assert len(els) == len(set([el['id'] for el in els])), 'Doubles in response'
-    assert len(list(filter(lambda x: city.lower() in x['city'].lower(), els))) == len(els), 'Wrong city in the filter result'
+    assert res.status_code == 200, "Status code differ from 200"
+    assert len(els) == len(set([el["id"] for el in els])), "Doubles in response"
+    assert len(list(filter(lambda x: city.lower() in x["city"].lower(), els))) == len(
+        els
+    ), "Wrong city in the filter result"
 
 
-@pytest.mark.parametrize('id', [utils.rnd_id() for i in range(3)])
+@pytest.mark.parametrize("id", [utils.rnd_id() for i in range(3)])
 def test_get_brew(id, build_link_all_brews):
-    res = requests.get(utils.build_link(build_link_all_brews, f'/{id}'))
+    res = requests.get(utils.build_link(build_link_all_brews, f"/{id}"))
     brew = res.json()
-    assert res.status_code == 200, 'Status code differ from 200'
-    assert 'list' not in str(type(brew)), 'There are same ids for several objects'
-    assert brew.get('name') is not None, 'Name is None'
-    assert brew.get('city') is not None, 'City is None'
-    assert brew.get('country') is not None, 'Country is None'
+    assert res.status_code == 200, "Status code differ from 200"
+    assert "list" not in str(type(brew)), "There are same ids for several objects"
+    assert brew.get("name") is not None, "Name is None"
+    assert brew.get("city") is not None, "City is None"
+    assert brew.get("country") is not None, "Country is None"
 
 
-@pytest.mark.parametrize('id', [utils.rnd_uuid() for i in range(3)])
+@pytest.mark.parametrize("id", [utils.rnd_uuid() for i in range(3)])
 def test_get_brew_negative(id, build_link_all_brews):
-    res = requests.get(utils.build_link(build_link_all_brews, f'/{id}'))
-    assert res.status_code == 404, 'Status code differ from 404'
-    assert '<title>Not Found</title>' in str(res.content), 'No information about error on the page'
-    assert '<!DOCTYPE html>' in str(res.content), 'No html file in response'
+    res = requests.get(utils.build_link(build_link_all_brews, f"/{id}"))
+    assert res.status_code == 404, "Status code differ from 404"
+    assert "<title>Not Found</title>" in str(res.content), (
+        "No information about error on the page"
+    )
+    assert "<!DOCTYPE html>" in str(res.content), "No html file in response"
 
 
-@pytest.mark.parametrize('amnt, expected', [
-    (1, 1),
-    (25, 25),
-    (50, 50)
-])
+@pytest.mark.parametrize("amnt, expected", [(1, 1), (25, 25), (50, 50)])
 def test_get_random_brew(amnt, expected, build_link_all_brews):
-    res = requests.get(utils.build_link(build_link_all_brews, f'/random?size={amnt}'))
+    res = requests.get(utils.build_link(build_link_all_brews, f"/random?size={amnt}"))
     brews = res.json()
-    assert res.status_code == 200, f'Status code is not 200 for {amnt} breweries'
-    assert len(brews) == expected, f'Amount of breweries doesnt equal to {amnt}'
-    assert len(brews) == len(set(map(lambda x: x['id'], brews))), 'There are doubles in the list'
-    assert brews[utils.rnd_el(brews)]['name'] is not None, 'Name is None'
-    assert brews[utils.rnd_el(brews)]['city'] is not None, 'City is None'
-    assert brews[utils.rnd_el(brews)]['country'] is not None, 'Country is None'
+    assert res.status_code == 200, f"Status code is not 200 for {amnt} breweries"
+    assert len(brews) == expected, f"Amount of breweries doesnt equal to {amnt}"
+    assert len(brews) == len(set(map(lambda x: x["id"], brews))), (
+        "There are doubles in the list"
+    )
+    assert brews[utils.rnd_el(brews)]["name"] is not None, "Name is None"
+    assert brews[utils.rnd_el(brews)]["city"] is not None, "City is None"
+    assert brews[utils.rnd_el(brews)]["country"] is not None, "Country is None"

@@ -1,0 +1,16 @@
+{
+  "statuses": {
+    "pass": "success",
+    "fail": "error"
+  },
+  "data": {
+    "rnd_limit_up": 50,
+    "rnd_limit_bottom": 1
+  },
+  "urls": {
+    "url_api": "https://dog.ceo/api",
+    "url_img": "https://images.dog.ceo/breeds",
+    "url_api_brew": "https://api.openbrewerydb.org/v1",
+    "url_api_json": "https://jsonplaceholder.typicode.com"
+  }
+}

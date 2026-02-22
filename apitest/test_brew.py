@@ -14,23 +14,24 @@ url = info["urls"]["url_api_brew"]
 def test_all_brews(build_link_all_brews):
     res = requests.get(build_link_all_brews)
     brews = res.json()
+    brews_names = [brew['name'] for brew in brews]
+    brews_cities = [brew['city'] for brew in brews]
+    brews_countries = [brew['country'] for brew in brews]
     assert res.status_code == 200, "Status code differ from 200"
     assert len(brews) == len(set([brew["id"] for brew in brews])), "Doubles in response"
-    assert brews[utils.rnd_el(brews)]["name"] is not None, "Name is None"
-    assert brews[utils.rnd_el(brews)]["city"] is not None, "City is None"
-    assert brews[utils.rnd_el(brews)]["country"] is not None, "Country is None"
+    assert None not in brews_names, "Some name is None"
+    assert None not in brews_cities, "Some city is None"
+    assert None not in brews_countries, "Some country is None"
 
 
 @pytest.mark.parametrize("city", [utils.rnd_city() for i in range(3)])
 def test_all_brews_filter(city, build_link_all_brews):
     city_url = city.lower().replace(" ", "_")
     res = requests.get(utils.build_link(build_link_all_brews, f"?by_city={city_url}"))
-    els = res.json()
     assert res.status_code == 200, "Status code differ from 200"
+    els = res.json()
     assert len(els) == len(set([el["id"] for el in els])), "Doubles in response"
-    assert len(list(filter(lambda x: city.lower() in x["city"].lower(), els))) == len(
-        els
-    ), "Wrong city in the filter result"
+    assert all((city.lower() in brew.get('city').lower() for brew in els)), "Wrong city in the filter result"
 
 
 @pytest.mark.parametrize("id", [utils.rnd_id() for i in range(3)])
@@ -38,7 +39,7 @@ def test_get_brew(id, build_link_all_brews):
     res = requests.get(utils.build_link(build_link_all_brews, f"/{id}"))
     brew = res.json()
     assert res.status_code == 200, "Status code differ from 200"
-    assert "list" not in str(type(brew)), "There are same ids for several objects"
+    assert isinstance(brew, dict), "There are same ids for several objects"
     assert brew.get("name") is not None, "Name is None"
     assert brew.get("city") is not None, "City is None"
     assert brew.get("country") is not None, "Country is None"

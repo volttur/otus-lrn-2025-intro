@@ -13,6 +13,7 @@ with open(os.environ.get("INFOPATH")) as f:
     info = json.load(f)
 url = info["urls"]["url_api_brew"]
 url_json = info["urls"]["url_api_json"]
+url_api = info["urls"]["url_api"]
 
 
 class RndNum(BaseProvider):
@@ -31,12 +32,22 @@ def build_link(base, endp):
 
 def rnd_breed(link):
     res = requests.get(link)
+    assert res.status_code == 200, 'Cant get random breed'
+    assert res.json().get("status") == "success", 'Cant get random breed'
     breeds = [breed for breed in res.json().get("message")]
     return breeds[rnd_el(breeds)]
 
 
 def rnd_el(arr):
-    return random.randint(0, len(arr) - 1)
+    rnd_num = None
+    if arr == []:
+        raise Exception()
+    try:
+        rnd_num = random.randint(0, len(arr) - 1)
+    except Exception:
+        print('Array for rnd_el func is empty')
+    else:
+        return rnd_num
 
 
 def rnd_city():
@@ -76,3 +87,8 @@ def gen_body():
 
 def gen_user_id():
     return random.randint(1, 9)
+
+
+def random_breeds(n=3):
+    url_all = build_link(url_api, '/breeds/list/all')
+    return [rnd_breed(url_all) for _ in range(n)]
